@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CIH project</title>
+<title>CIH Project</title>
 <style>
   body {
     margin: 0;
@@ -101,7 +101,7 @@
 <button id="modeToggle">Dark Mode</button>
 
 <!-- Pages -->
-<div id="page1" class="page active">
+<div id="page1" class="page">
   <h1>Page 1</h1>
   <p>Welcome to page 1!</p>
 </div>
@@ -128,7 +128,7 @@
 
 <!-- Bottom Navigation -->
 <div id="nav">
-  <button onclick="showPage(1)" class="active">1</button>
+  <button onclick="showPage(1)">1</button>
   <button onclick="showPage(2)">2</button>
   <button onclick="showPage(3)">3</button>
   <button onclick="showPage(4)">4</button>
@@ -139,6 +139,7 @@
   const body = document.body;
   const modeButton = document.getElementById('modeToggle');
   const navButtons = document.querySelectorAll('#nav button');
+  const pages = document.querySelectorAll('.page');
 
   // Dark/Light mode toggle
   modeButton.addEventListener('click', () => {
@@ -146,17 +147,18 @@
     modeButton.textContent = body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
   });
 
-  // Page switching
+  // Show page function
   function showPage(num) {
-    const pages = document.querySelectorAll('.page');
-    pages.forEach((p, i) => {
-      p.classList.toggle('active', i === num - 1);
-    });
+    pages.forEach((p, i) => p.classList.toggle('active', i === num - 1));
+    navButtons.forEach((btn, i) => btn.classList.toggle('active', i === num - 1));
 
-    navButtons.forEach((btn, i) => {
-      btn.classList.toggle('active', i === num - 1);
-    });
+    // Save the last page to localStorage
+    localStorage.setItem('lastPage', num);
   }
+
+  // Load last visited page from localStorage on page load
+  const lastPage = parseInt(localStorage.getItem('lastPage')) || 1;
+  showPage(lastPage);
 </script>
 
 </body>
