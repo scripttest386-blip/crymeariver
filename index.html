@@ -5,20 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CIH Project</title>
 <style>
+  /* Basic reset */
   body {
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
     background-color: #ffffff;
     color: #000000;
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.5s, color 0.5s;
   }
   body.dark-mode {
     background-color: #121212;
     color: #ffffff;
   }
 
-  /* Dark/light mode button */
+  /* Header */
+  header {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #f2f2f2;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transition: background-color 0.5s, color 0.5s;
+  }
+  body.dark-mode header {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+
+  /* Dark/Light mode button */
   #modeToggle {
     position: fixed;
     top: 20px;
@@ -31,19 +51,23 @@
     background-color: #555555;
     color: #ffffff;
     transition: background-color 0.3s;
+    z-index: 20;
   }
   #modeToggle:hover {
     background-color: #777777;
   }
 
-  /* Page container */
+  /* Pages */
   .page {
     display: none;
-    padding: 20px;
+    padding: 100px 20px 80px; /* space for header/footer */
     min-height: 80vh;
+    opacity: 0;
+    transition: opacity 0.5s;
   }
   .page.active {
     display: block;
+    opacity: 1;
   }
 
   /* Bottom navigation */
@@ -54,9 +78,8 @@
     display: flex;
     justify-content: center;
     gap: 10px;
+    z-index: 10;
   }
-
-  /* Google-style buttons */
   #nav button {
     width: 40px;
     height: 40px;
@@ -64,12 +87,12 @@
     border: 2px solid transparent;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border 0.3s;
     font-size: 16px;
     background-color: transparent;
+    transition: all 0.3s;
   }
 
-  /* Light mode colors */
+  /* Light mode buttons */
   body:not(.dark-mode) #nav button {
     color: #000000;
     border-color: #000000;
@@ -79,7 +102,7 @@
     color: #ffffff;
   }
 
-  /* Dark mode colors */
+  /* Dark mode buttons */
   body.dark-mode #nav button {
     color: #ffffff;
     border-color: #ffffff;
@@ -88,42 +111,81 @@
     background-color: #ffffff;
     color: #000000;
   }
-
   #nav button:hover {
     opacity: 0.8;
+  }
+
+  /* Sample cards */
+  .card {
+    background-color: #e0e0e0;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 10px;
+    transition: background-color 0.5s, color 0.5s;
+  }
+  body.dark-mode .card {
+    background-color: #2a2a2a;
+    color: #ffffff;
+  }
+  .card img {
+    max-width: 100%;
+    border-radius: 5px;
   }
 
 </style>
 </head>
 <body>
 
-<!-- Dark/Light Mode Button -->
+<header>CIH Project</header>
+
 <button id="modeToggle">Dark Mode</button>
 
 <!-- Pages -->
 <div id="page1" class="page">
   <h1>Page 1</h1>
-  <p>Welcome to page 1!</p>
+  <p>Welcome to the CIH Project homepage!</p>
+  <div class="card">
+    <h3>Sample Card 1</h3>
+    <p>This is a sample card with some text content.</p>
+    <a href="#">Read More</a>
+  </div>
 </div>
 
 <div id="page2" class="page">
   <h1>Page 2</h1>
-  <p>This is page 2.</p>
+  <p>Here is page 2 content.</p>
+  <div class="card">
+    <img src="https://via.placeholder.com/400x200" alt="Sample Image">
+    <p>Example of an image inside a card.</p>
+  </div>
 </div>
 
 <div id="page3" class="page">
   <h1>Page 3</h1>
-  <p>This is page 3.</p>
+  <p>Page 3 info goes here.</p>
+  <div class="card">
+    <h3>Another Card</h3>
+    <p>Cards help separate content neatly.</p>
+  </div>
 </div>
 
 <div id="page4" class="page">
   <h1>Page 4</h1>
-  <p>This is page 4.</p>
+  <p>Page 4 content.</p>
+  <div class="card">
+    <h3>Links & Resources</h3>
+    <a href="#">Resource Link 1</a><br>
+    <a href="#">Resource Link 2</a>
+  </div>
 </div>
 
 <div id="page5" class="page">
   <h1>Page 5</h1>
-  <p>This is page 5.</p>
+  <p>Final page content.</p>
+  <div class="card">
+    <h3>Contact Info</h3>
+    <p>Email: example@cihproject.com</p>
+  </div>
 </div>
 
 <!-- Bottom Navigation -->
@@ -152,11 +214,11 @@
     pages.forEach((p, i) => p.classList.toggle('active', i === num - 1));
     navButtons.forEach((btn, i) => btn.classList.toggle('active', i === num - 1));
 
-    // Save the last page to localStorage
+    // Save last page
     localStorage.setItem('lastPage', num);
   }
 
-  // Load last visited page from localStorage on page load
+  // Load last visited page
   const lastPage = parseInt(localStorage.getItem('lastPage')) || 1;
   showPage(lastPage);
 </script>
