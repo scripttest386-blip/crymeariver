@@ -14,7 +14,7 @@
     color: #000000;
     transition: background-color 0.5s, color 0.5s;
     position: relative;
-    overflow-x: hidden;
+    min-height: 200vh; /* Make scrollable */
   }
   body.dark-mode {
     background-color: #121212;
@@ -36,10 +36,10 @@
     pointer-events: none;
     transition: filter 0.5s, opacity 0.5s;
     z-index: 0;
-    filter: brightness(0) invert(0); /* default for light mode */
+    filter: brightness(0) invert(0); /* default light mode */
   }
   body.dark-mode::before {
-    filter: brightness(1) invert(1); /* makes it light/white-ish in dark mode */
+    filter: brightness(1) invert(1); /* light/white in dark mode */
     opacity: 0.08;
   }
 
@@ -84,8 +84,7 @@
   /* Pages */
   .page {
     display: none;
-    padding: 100px 20px 80px; /* space for header/footer */
-    min-height: 80vh;
+    padding: 100px 20px 150px; /* space for header and bottom */
     opacity: 0;
     transition: opacity 0.5s;
     position: relative;
@@ -105,6 +104,7 @@
     justify-content: center;
     gap: 10px;
     z-index: 10;
+    transition: bottom 0.3s;
   }
   #nav button {
     width: 40px;
@@ -117,8 +117,6 @@
     background-color: transparent;
     transition: all 0.3s;
   }
-
-  /* Light mode buttons */
   body:not(.dark-mode) #nav button {
     color: #000000;
     border-color: #000000;
@@ -127,8 +125,6 @@
     background-color: #000000;
     color: #ffffff;
   }
-
-  /* Dark mode buttons */
   body.dark-mode #nav button {
     color: #ffffff;
     border-color: #ffffff;
@@ -139,6 +135,28 @@
   }
   #nav button:hover {
     opacity: 0.8;
+  }
+
+  /* Contact Us Button */
+  #contactBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 80px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    display: none; /* initially hidden */
+    z-index: 15;
+    text-decoration: none; /* remove underline */
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+  #contactBtn:hover {
+    opacity: 0.9;
   }
 
   /* Sample cards */
@@ -223,11 +241,18 @@
   <button onclick="showPage(5)">5</button>
 </div>
 
+<!-- Contact Us Button -->
+<a id="contactBtn" href="mailto:scripttest386@gmail.com?subject=CIH%20Project%20Support&body=Hello,%20I%20encountered%20a%20problem..." target="_blank">
+  If you encounter any problems contact us
+</a>
+
 <script>
   const body = document.body;
   const modeButton = document.getElementById('modeToggle');
   const navButtons = document.querySelectorAll('#nav button');
   const pages = document.querySelectorAll('.page');
+  const contactBtn = document.getElementById('contactBtn');
+  const nav = document.getElementById('nav');
 
   // Dark/Light mode toggle
   modeButton.addEventListener('click', () => {
@@ -245,6 +270,23 @@
   // Load last visited page
   const lastPage = parseInt(localStorage.getItem('lastPage')) || 1;
   showPage(lastPage);
+
+  // Scroll behavior
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    // Show contact button after scrolling down 300px
+    contactBtn.style.display = scrollY > 300 ? 'block' : 'none';
+
+    // Move nav buttons up if nearing bottom (simulate stop)
+    const maxNavBottom = 20; // normal distance from bottom
+    const footerStop = document.body.scrollHeight - window.innerHeight - 100;
+    if (scrollY > footerStop) {
+      nav.style.bottom = `${scrollY - footerStop + maxNavBottom}px`;
+    } else {
+      nav.style.bottom = `${maxNavBottom}px`;
+    }
+  });
+
 </script>
 
 </body>
